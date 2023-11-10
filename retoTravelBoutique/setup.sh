@@ -15,9 +15,9 @@ LCYAN='\033[0;36m'
 
 if [ "${USERID}" -ne 0 ]; then
     echo -e "\n${LRED}[!] Verificando usuario ROOT${NC}"
-    chmod +x build.sh
-    chmod +x init.sh
-    chmod +x discord.sh
+    sudo chmod +x build.sh
+    sudo chmod +x init.sh
+    sudo chmod +x discord.sh
     exit
 fi
 
