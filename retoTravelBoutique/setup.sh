@@ -10,30 +10,35 @@ LGREEN='\033[1;32m'
 NC='\033[0m'
 LBLUE='\033[0;34m'
 LYELLOW='\033[1;33m'
+lPURPLE='\033[0;35m' 
+LCYAN='\033[0;36m'   
 
 if [ "${USERID}" -ne 0 ]; then
-    echo -e "\n${LRED}Correr con usuario ROOT${NC}"
+    echo -e "\n${LRED}[!] Verificando usuario ROOT${NC}"
+    chmod +x build.sh
+    chmod +x init.sh
+    chmod +x discord.sh
     exit
 fi
 
-echo "====================================="
-sudo apt-get update
-echo -e "\n${LGREEN}El servidor se encuentra Actualizado ...${NC}"
-echo "====================================="
-
-echo "====================================="
-echo -e "\n${LBLUE}Ejecutar la etapa 1: [Init] ...${NC}"
-./01-init.sh
+echo -e "\n${LPURPLE}[INIT] Validando actualizaciones del servidor "
+sudo apt-get update -y
+echo -e "\n${LCYAN} [+] El servidor se encuentra Actualizado ...${NC}"
 echo "====================================="
 
 echo "====================================="
-echo -e "\n${LBLUE}Ejecutar la etapa 2: [Build] ...${NC}"
-./02-build.sh $repo $app
+echo -e "\n${LBLUE} [+] Ejecutar STAGE 1: ${LPURPLE}[INIT] ...${NC}"
+./init.sh
 echo "====================================="
 
 echo "====================================="
-echo -e "\n${LBLUE}Ejecutar la etapa 3: [Deploy] ...${NC}"
+echo -e "\n${LBLUE} [+] Ejecutar STAGE 2: [Build] ...${NC}"
+./build.sh $repo $app
+echo "====================================="
+
+echo "====================================="
+echo -e "\n${LBLUE}[+] Ejecutar STAGE 3: [Deploy] ...${NC}"
 read -p "Ingrese el host de la aplicación: " host_url
 # Quita la barra diagonal al final de la URL (si existe)
-./03-discord.sh ~/$repo "${host_url%/}/$app/"
+./discord.sh ~/$repo "${host_url%/}/$app/"
 echo "====================================="

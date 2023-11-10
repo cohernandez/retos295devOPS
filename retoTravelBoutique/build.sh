@@ -11,11 +11,11 @@ LYELLOW='\033[1;33m'
 
 clone_repository() {
     if [ ! -d ~/$repo ]; then
-        echo -e "\n${LYELLOW}Clonando el repositorio $repo ...${NC}"
+        echo -e "\n${LCYAN} [!] Clonando el repositorio $repo ...${NC}"
         cd ~
-        git clone -b clase2-linux-bash https://github.com/dsantafe/$repo
+        git clone -b clase2-linux-bash https://github.com/cohernandez/bootcamp-devops-2023/tree/clase2-linux-bash/app-295devops-travel #$repo
     else
-        echo -e "\n${LYELLOW}Actualizando el repositorio $repo ...${NC}"
+        echo -e "\n${LCYAN} [!] Actualizando el repositorio $repo ...${NC}"
         cd ~/$repo
         git pull
     fi
@@ -32,7 +32,7 @@ copy_application() {
         sudo mv /var/www/html/$app/* /var/www/html/$backup_dir
     fi
 
-    echo -e "\n${LYELLOW}Copiando el código de la aplicación ...${NC}"
+    echo -e "\n${LCYAN}[!] Copiando el código de la aplicación ...${NC}"
     sudo cp -r ~/$repo/$app /var/www/html
     echo "====================================="
 }
@@ -40,12 +40,12 @@ copy_application() {
 configure_mariadb() {
 
     echo "====================================="
-    echo -e "\n${LBLUE}Configurando base de datos ...${NC}"
+    echo -e "\n${LBLUE} [!] Configurando base de datos ...${NC}"
     local db_password="$1"
 
     # Comprobar si la base de datos ya existe
     if mysql -e "USE devopstravel;" 2>/dev/null; then
-        echo -e "\n${LGREEN}La base de datos 'devopstravel' ya existe ...${NC}"
+        echo -e "\n${LRED} [-] La base de datos 'devopstravel' ya existe ...${NC}"
     else
         # Configura MariaDB (crea la base de datos, el usuario y establece la contraseña)
         mysql -e "
@@ -64,7 +64,7 @@ configure_mariadb() {
 configure_php() {
 
     echo "====================================="
-    echo -e "\n${LBLUE}Configurando el servidor web ...${NC}"
+    echo -e "\n${LCYAN} [!] Configurando el servidor web ...${NC}"
     # Mover archivos de configuración de Apache
     sudo mv /var/www/html/index.html /var/www/html/index.html.bkp
 

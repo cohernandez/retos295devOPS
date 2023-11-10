@@ -1,5 +1,12 @@
 #!/bin/bash
 
+### Tareas ###
+# STAGE 1: [Init]
+# Instalacion de paquetes en el servidor: [apache, php, mariadb, git, curl, etc]
+# Validación de existencia de paquetes en servidor
+# Habilitacion y Testing de los paquetes instalados
+
+
 LRED='\033[1;31m'
 LGREEN='\033[1;32m'
 NC='\033[0m'
@@ -10,8 +17,8 @@ LCYAN='\033[0;36m'
 
 check_status() {
   if [ $1 -eq 0 ]; then
-    echo "Éxito"
-    echo -e "\n${LGREEN} Éxito ...${NC}"
+    echo -e "\n${LPURPLE}[ok] Éxito"
+    echo -e "\n${LPURPLE}[ok] Éxito ...${NC}"
   else
     echo -e "\n${LRED} Error: El comando falló. Saliendo del script ...${NC}"
     exit 1
@@ -26,8 +33,8 @@ install_packages() {
     if [ $? -eq 0 ]; then
       echo -e "\n${LGREEN} $package ya está instalado ...${NC}"
     else
-      echo -e "\n${LYELLOW}instalando $package ...${NC}"
-      sudo apt-get install -y $package
+      echo -e "\n${LCYAN}instalando $package ...${NC}"
+      apt-get install -y $package
       check_status $?
     fi
   done
@@ -37,8 +44,4 @@ install_packages() {
   sudo systemctl enable mariadb && sudo systemctl start mariadb
 }
 
-# STAGE 1: [Init]
-# Instalacion de paquetes en el sistema operativo ubuntu: [apache, php, mariadb, git, curl, etc]
-# Validación si esta instalado los paquetes o no , de manera de no reinstalar
-# Habilitar y Testear instalación de los paquetes
 install_packages
