@@ -1,123 +1,140 @@
 #!/bin/bash
-### Ejercio reto 1 ###
 
-### variables ###
-variableRepo="app-295devops-travel"
-repo="bootcamp-devops-2023"
-userID=$(id -u)
+##### Stage 1 #####
 
-### colores ###
+USERID=$(id -u)
 
-LRED='\033[1;31m'
-LGREEN='\033[1;32m'
-NC='\033[0m'
-LBLUE='\033[0;34m'
-LYELLOW='\033[1;33m'
-lPURPLE='\033[0;35m' 
-LCYAN='\033[0;36m'   
+# Root user
+if [[ "${USERID}" -ne "0" ]]; then
+    echo -e "\e[31;1;3mUsuario inválido.\e[m"
+    exit 1
+fi
+echo "  === Updating ==="
+apt-get update
+echo "  "
+echo "  === Server updated ==="
+echo "  "
 
-echo "=== Validacion de Usuario Root ==="
-echo -e "\n${LYELLOW}[+] Validando usuario root :${LCYAN} ${userID}"
-if [ "${userID}" -ne 0 ];
-then
-        echo -e "\n${LRED} Ejecutar con usuario ROOT${NC}"
-        exit
+# curl
+if ! dpkg -s curl > /dev/null 2>&1; then
+    apt install curl -y 2>&1
 fi
 
-echo -e "\n${LPURPLE}[INIT] Stage 1"
-
-echo -e "\n${LYELLOW}[!] Validando Actualizaciones" 
-apt update -y && apt upgrade -y
-
-echo -e "\n${LYELLOW}[!] Verificando paquete Git"
-if dpkg -l | grep -q git;
-then
-        echo -e "\n${LGREEN}[ok] GIT ya se encuentra instalado"
-        echo -e "\n${LYELLOW}[!] Verificando paquete apache"
-        if dpkg -l | grep -q apache2;
-        then
-                echo -e "\n${LGREEN}[ok] El servidor Apache ya se encuentra instalado"
-        else
-                apt install apache2 -y
-                apt install php libapache2-mod-php php-mysql php-mbstring php-zip php-gd php-json php-curl -y
-                echo -e "\n${LGREEN}[ok] Servidor Apache instalado con exito"
-                ### iniciar servidor apache ###
-                systemctl start apache2
-                systemctl enable apache2
-                echo -e "\n${LPURPLE} [version php] : ${LRED}$(php -v)"
-                cat > /etc/apache2/mods-enabled/dir.conf <<-EOF
-                <IfModule mod_dir.c>
-                        DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm
-                </IfModule>
-EOF 
-        fi
+# Git
+if dpkg -s git > /dev/null 2>&1; then
+    echo "  *** Git installed ***"
 else
-        echo -e "\n${LRED}[!] GIT no se encuentra instalado"
-        apt install git -y
+    echo "installing Git..."
+    apt install git -y > /dev/null 2>&1
+    echo "  *** successful Installation ***"
 fi
-
-### Base de Datos mariaDB ###
-echo -e "\n${LYELLOW}[!] Verificando existencia de mariaDB"
-if dpkg -s mariadb-server > /dev/null 2>&1;
-then
-        echo -e "\n${LGREEN}[+] MariaDB se encuentra instalado"
+git --version | head -n 1
+echo "====================================="
+# Mariadb
+if dpkg -s mariadb-server > /dev/null 2>&1; then
+    echo "  *** mariadb installed ***"
+    mariadb -V | head -n 1
 else
-        echo -e "\n${LYELLOW}[!] Instalando MariaDB"
-        apt install -y mariadb-server
-        systemctl start mariadb
-        systemctl enable mariadb
-fi
-### configurando la db ###
-        mysql -e "
-        CREATE DATABASE devopstravel;
-        CREATE USER 'codeuser'@'localhost' IDENTIFIED BY 'codepass';
-        GRANT ALL PRIVILEGES ON *.* TO 'codeuser'@'localhost';
-        FLUSH PRIVILEGES;"
-        
-### Crear script e insertar datos en las tablas  ###
-cat > devopstravel.sql <<-EOF
-USE devopstravel;
-CREATE TABLE products (id mediumint(8) unsigned NOT NULL auto_increment,Name varchar(255) default NULL,Price varchar(255) default NULL, ImageUrl varchar(255) default NULL,PRIMARY KEY (id)) AUTO_INCREMENT=1;
-
-INSERT INTO products (Name,Price,ImageUrl) VALUES ("Laptop","100","c-1.png"),("Drone","200","c-2.png"),("VR","300","c-3.png"),("Tablet","50","c-5.png"),("Watch","90","c-6.png"),("Phone Covers","20","c-7.png"),("Phone","80","c-8.png"),("Laptop","150","c-4.png");
-
-EOF
-### Ejecutar script ###
-        mysql < database/devopstravel.sql
-
-### Instalar Web ###
-echo "[!] Modificando index.html"
-if [ -d "$variableRepo" ];
-then
-        echo "La carpeta $variableRepo existe"       
+    echo "installing mariadb..."
+    apt install -y mariadb-server > /dev/null 2>&1
+    systemctl start mariadb
+    systemctl enable mariadb
+    echo "  *** successful Installation ***"
+    mariadb -V | head -n 1
+    # Configuración de la base de datos
+    echo "  === Configurating Database ==="
+    mysql -e "CREATE DATABASE devopstravel;
+    CREATE USER 'codeuser'@'localhost' IDENTIFIED BY 'codepass';
+    GRANT ALL PRIVILEGES ON *.* TO 'codeuser'@'localhost';
+    FLUSH PRIVILEGES;"
 fi
 
-echo -e "\n${LPURPLE}[BUILD] Stage 2"
-echo -e "\n${LCYAN}[!] Instalando contedido web"
-sleep 1
+echo "====================================="
+# Apache
+if dpkg -s apache2 > /dev/null 2>&1; then
+    echo "  *** apache installed ***"
+else
+    echo "installing apache..."
+    apt install apache2 -y > /dev/null 2>&1
+    sudo systemctl start apache2
+    sudo systemctl enable apache2
+    mv /var/www/html/index.html /var/www/html/index.html.bkp
+    echo "  *** successful Installation ***"
+fi
+apache2 -v | head -n 1
+echo "====================================="
+# PHP
+if dpkg -s php > /dev/null 2>&1; then
+    echo "  ***php installed ***"
+else
+    echo "installing php..."
+    apt install -y php libapache2-mod-php php-mysql php-mbstring php-zip php-gd php-json php-curl > /dev/null 2>&1
+    echo "  *** successful Installation ***"
+fi
+php -v | head -n 1
+echo "====================================="
 
-## clonar_repo()
+##### Stage 2 #####
 
-git clone -b clase2-linux-bash https://github.com/cohernandez/bootcamp-devops-2023/tree/clase2-linux-bash/app-295devops-travel
-#cp -r $variableRepo/CLASE-02/lamp-app-ecommerce/* /var/www/html/
-cp -r The-DevOps-Journey-101/CLASE-02/lamp-app-ecommerce/* /var/www/html/
-mv /var/www/html/index.html /var/www/html/index.html.bkp
-echo -e "\n${LCYAN}[!] Busca y reemplaza IP del servidor por localhost en el archivo index.php"
-sed -i 's/172.20.1.101/localhost/g' /var/www/html/index.php
+MAIN="/root/BootCamp-DevOps-roxsross"
+REPO="bootcamp-devops-2023"
+BRANCH="clase2-linux-bash"
+APP="app-295devops-travel"
 
-### reload ###
-echo -e "\n${LPURPLE}[DEPLOY] Stage 3"
+# Test de Repo
+if test -d "$MAIN/$REPO"; then
+    cd $MAIN/$REPO
+    git pull
+else
+    sleep 1
+    git clone -b $BRANCH https://github.com/roxsross/$REPO.git
+    # Injección de primeros datos
+    mysql < /root/$REPO/$APP/database/devopstravel.sql
+fi
 
-systemctl reload apache2
+# Copiando archivos
+cd $MAIN
+cp -r /$MAIN/$REPO/$APP/* /var/www/html
+# Test de codigo
+if test -f "/var/www/html/index.php"; then 
+    echo "  "
+    echo "  === The code was copied ==="
+fi
+sleep 5
+sudo systemctl reload apache2
+curl localhost/info.php
 
-echo -e "\n${LPURPLE}[NOTIFY] Stage 4"
-echo -e "\n${LCYAN} [ok] Servidor actualizado con exito"
-echo -e "\n${LCYAN} [ok] Git "
-echo -e "\n${LCYAN} [ok] Apache"
-echo -e "\n${LCYAN} [ok] index.html modificado con exito"
+##### Stage 3 #####
+curl localhost
 
+##### Stage 4 #####
+DISCORD="https://discord.com/api/webhooks/1169002249939329156/7MOorDwzym-yBUs3gp0k5q7HyA42M5eYjfjpZgEwmAx1vVVcLgnlSh4TmtqZqCtbupov"
 
+# Obtiene el nombre del repositorio
+REPO_NAME=$(basename $(git rev-parse --show-toplevel))
+# Obtiene la URL remota del repositorio
+REPO_URL="Repositorio: (BootCamp-DevOps-roxsross: $(git remote get-url origin))"
+WEB_URL="localhost"
+# Realiza una solicitud HTTP GET a la URL
+HTTP_STATUS=$(curl -Is "$WEB_URL" | head -n 1)
 
+# Verificación de respuesta 
+if [[ "$HTTP_STATUS" == *"200 OK"* ]]; then
+  # Obtén información del repositorio
+    DEPLOYMENT_INFO2="Despliegue del repositorio $REPO_NAME: "
+    DEPLOYMENT_INFO="La página web $WEB_URL está en línea."
+    COMMIT="Commit: $(git rev-parse --short HEAD)"
+    AUTHOR="Autor: $(git log -1 --pretty=format:'%an')"
+    DESCRIPTION="Descripción: $(git log -1 --pretty=format:'%s')"
+else
+  DEPLOYMENT_INFO="La página web $WEB_URL no está en línea."
+fi
 
+# Mensaje
+# MESSAGE="$DEPLOYMENT_INFO2\n$DEPLOYMENT_INFO\n$COMMIT\n$AUTHOR\n$REPO_URL\n$DESCRIPTION"
 
-
+# Discord API
+# curl -X POST -H "Content-Type: application/json" \
+#     -d '{
+#       "content": "'"${MESSAGE}"'"
+#     }' "$DISCORD"
