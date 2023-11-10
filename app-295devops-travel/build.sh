@@ -17,7 +17,9 @@ clone_repository() {
     if [ ! -d ~/$repo ]; then
         echo -e "\n${LCYAN} [!] Clonando el repositorio $repo ...${NC}"
         cd ~
-        git clone -b clase2-linux-bash https://github.com/cohernandez/bootcamp-devops-2023/tree/clase2-linux-bash/app-295devops-travel #$repo
+         git clone https://github.com/roxsross/$repo.git
+        cd $repo
+        git checkout clase2-linux-bash
     else
         echo -e "\n${LCYAN} [!] Actualizando el repositorio $repo ...${NC}"
         cd ~/$repo

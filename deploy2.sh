@@ -12,6 +12,8 @@ repo="bootcamp-devops-2023"
 paquetes="git apache2 php pwgen mariadb-server"
 ip_ec2=$(curl ifconfig.me)
 DISCORD=""
+
+### STAGE 2 ###
 #cloning repo
 if [ "$(ls | grep $repo)" = "$repo" ]; then
         echo "el repo ya existe, nada para hacer"
@@ -22,6 +24,8 @@ else
         cd $repo
         git checkout clase2-linux-bash
 fi
+
+### STAGE 1 ###
 ##update paquetes
 for i in $paquetes; do
         if dpkg -l | grep -q "$i"; then
