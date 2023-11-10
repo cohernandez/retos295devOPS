@@ -1,5 +1,5 @@
 #!/bin/bash
-### Ejercio 1 The-DevOps-Journey-101 ###
+### Ejercio reto 1 ###
 #variables
 variableRepo="The-DevOps-Journey-101"
 userID=$(id -u)
