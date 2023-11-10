@@ -1,7 +1,9 @@
 #!/bin/bash
 
-repo=""
-app=""
+main="/root/BootCamp-DevOps-roxsross"
+repo="bootcamp-devops-2023"
+BRANCH="clase2-linux-bash"
+app="app-295devops-travel"
 
 LRED='\033[1;31m'
 LGREEN='\033[1;32m'
@@ -9,6 +11,8 @@ NC='\033[0m'
 LBLUE='\033[0;34m'
 LYELLOW='\033[1;33m'
 
+
+### GIT ###
 clone_repository() {
     if [ ! -d ~/$repo ]; then
         echo -e "\n${LCYAN} [!] Clonando el repositorio $repo ...${NC}"
