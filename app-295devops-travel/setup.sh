@@ -15,30 +15,40 @@ LCYAN='\033[0;36m'
 
 if [ "${USERID}" -ne 0 ]; then
     echo -e "\n${LRED}[!] Verificando usuario ROOT${NC}"
-    sudo chmod +x build.sh
-    sudo chmod +x init.sh
-    sudo chmod +x discord.sh
-    exit
+    exit 1
 fi
 
+update(){
 echo -e "\n${LPURPLE}[INIT] Validando actualizaciones del servidor "
 sudo apt-get update -y
 echo -e "\n${LCYAN} [+] El servidor se encuentra Actualizado ...${NC}"
 echo "====================================="
+}
 
+Init(){
 echo "====================================="
 echo -e "\n${LBLUE} [+] Ejecutar STAGE 1: ${LPURPLE}[INIT] ...${NC}"
 ./init.sh
 echo "====================================="
+}
 
+Build(){
 echo "====================================="
 echo -e "\n${LBLUE} [+] Ejecutar STAGE 2: [Build] ...${NC}"
 ./build.sh $repo $app
 echo "====================================="
+}
 
+Deploy(){
 echo "====================================="
 echo -e "\n${LBLUE}[+] Ejecutar STAGE 3: [Deploy] ...${NC}"
 read -p "Ingrese el host de la aplicación: " host_url
 # Quita la barra diagonal al final de la URL (si existe)
 ./discord.sh ~/$repo "${host_url%/}/$app/"
 echo "====================================="
+}
+
+update
+Init
+Build
+Deploy
