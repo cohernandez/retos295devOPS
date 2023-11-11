@@ -17,7 +17,6 @@ LCYAN='\033[0;36m'
 
 check_status() {
   if [ $1 -eq 0 ]; then
-    echo -e "\n${LPURPLE}[ok] Éxito"
     echo -e "\n${LPURPLE}[ok] Éxito ...${NC}"
   else
     echo -e "\n${LRED} Error: El comando falló. Saliendo del script ...${NC}"
