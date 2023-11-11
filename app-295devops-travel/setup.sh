@@ -43,7 +43,7 @@ Deploy(){
 echo -e "\n${YELLOW} ====================================="
 echo -e "\n${LBLUE}[+] Ejecutar STAGE 3: [Deploy] ...${NC}"
 host_url=$(curl ifconfig.me)
-read -p "Ingrese el host de la aplicación: " $host_url
+read -p "Ingrese el host de la aplicación: " ${host_url}
 ./discord.sh ~/$repo "${host_url%/}/$app/"
 echo -e "\n${YELLOW} ====================================="
 }
