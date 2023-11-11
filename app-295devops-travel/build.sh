@@ -19,7 +19,8 @@ clone_repository() {
     if [ ! -d ~/$repo ]; then
         echo -e "\n${LCYAN} [!] Clonando el repositorio $repo ...${NC}"
         cd ~
-         git clone https://github.com/roxsross/$repo.git
+         git clone https://github.com/cohernandez/$repo.git
+         #git clone https://github.com/roxsross/$repo.git
         cd $repo
         git checkout clase2-linux-bash
     else
