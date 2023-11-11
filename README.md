@@ -16,6 +16,10 @@ Soluciones a los reto `https://reto.295devops.com/` de la IV Edición Bootcamp D
 - `chmod +x *` 
 - `./setup.sh`
 
+![Descripción de la imagen](/images/options.png)
+![Descripción de la imagen](/images/trafficPort.png)
+
+
 # Creditos 
 - https://github.com/roxsross/bootcamp-devops-2023
 
