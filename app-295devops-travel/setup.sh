@@ -18,37 +18,37 @@ if [ "${USERID}" -ne 0 ]; then
     exit 1
 fi
 
-update(){
+Update(){
 echo -e "\n${LPURPLE}[INIT] Validando actualizaciones del servidor "
 sudo apt-get update -y
 echo -e "\n${LCYAN} [+] El servidor se encuentra Actualizado ...${NC}"
-echo "====================================="
+echo -e "\n${YELLOW} ====================================="
 }
 
 Init(){
-echo "====================================="
+echo -e "\n${YELLOW} ====================================="
 echo -e "\n${LBLUE} [+] Ejecutar STAGE 1: ${LPURPLE}[INIT] ...${NC}"
 ./init.sh
-echo "====================================="
+echo -e "\n${YELLOW} ====================================="
 }
 
 Build(){
-echo "====================================="
+echo -e "\n${YELLOW} ====================================="
 echo -e "\n${LBLUE} [+] Ejecutar STAGE 2: [Build] ...${NC}"
 ./build.sh $repo $app
-echo "====================================="
+echo -e "\n${YELLOW} ====================================="
 }
 
 Deploy(){
-echo "====================================="
+echo -e "\n${YELLOW} ====================================="
 echo -e "\n${LBLUE}[+] Ejecutar STAGE 3: [Deploy] ...${NC}"
 read -p "Ingrese el host de la aplicación: " host_url
 # Quita la barra diagonal al final de la URL (si existe)
 ./discord.sh ~/$repo "${host_url%/}/$app/"
-echo "====================================="
+echo -e "\n${YELLOW} ====================================="
 }
 
-update
+Update
 Init
 Build
 Deploy

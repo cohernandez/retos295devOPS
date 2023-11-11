@@ -10,6 +10,8 @@ LGREEN='\033[1;32m'
 NC='\033[0m'
 LBLUE='\033[0;34m'
 LYELLOW='\033[1;33m'
+lPURPLE='\033[0;35m' 
+LCYAN='\033[0;36m' 
 
 
 ### GIT ###
@@ -28,24 +30,22 @@ clone_repository() {
 }
 
 copy_application() {
-    echo "====================================="
-
-    # Testear la existencia del código de la aplicación
+    echo -e "\n${LPURPLE} [!] Testear la existencia del código de la aplicación"
     if [ -d /var/www/html/$app ]; then
-        echo -e "\n${LGREEN}El código de la aplicación existe. Realizando copia de seguridad ...${NC}"
+        echo -e "\n${LGREEN} [!] El código de la aplicación existe. Realizando copia de seguridad ...${NC}"
         backup_dir="$app_$(date +'%Y%m%d_%H%M%S')"
         sudo mkdir /var/www/html/$backup_dir
         sudo mv /var/www/html/$app/* /var/www/html/$backup_dir
     fi
 
-    echo -e "\n${LCYAN}[!] Copiando el código de la aplicación ...${NC}"
+    echo -e "\n${LPURPLE}[!] Copiando el código de la aplicación ...${NC}"
     sudo cp -r ~/$repo/$app /var/www/html
-    echo "====================================="
+    echo -e "\n${YELLOW} ====================================="
 }
 
 configure_mariadb() {
 
-    echo "====================================="
+    echo -e "\n${YELLOW} ====================================="
     echo -e "\n${LBLUE} [!] Configurando base de datos ...${NC}"
     local db_password="$1"
 
@@ -64,12 +64,12 @@ configure_mariadb() {
         mysql <~/$repo/$app/database/devopstravel.sql
     fi
 
-    echo "====================================="
+    echo -e "\n${YELLOW} ====================================="
 }
 
 configure_php() {
 
-    echo "====================================="
+    echo -e "\n${YELLOW} ====================================="
     echo -e "\n${LCYAN} [!] Configurando el servidor web ...${NC}"
     # Mover archivos de configuración de Apache
     sudo mv /var/www/html/index.html /var/www/html/index.html.bkp
@@ -86,7 +86,7 @@ configure_php() {
 
     # Verifica si PHP está funcionando correctamente
     php -v
-    echo "====================================="
+    echo -e "\n${YELLOW} ====================================="
 }
 
 # STAGE 2: [Build]
@@ -108,7 +108,7 @@ repo="$1"
 app="$2"
 
 # Solicitar al usuario la contraseña de la base de datos en tiempo de despliegue
-read -s -p "Ingrese la contraseña de la base de datos: " db_password
+read -s -p "Ingrese password de la base de datos: " db_password
 
 # Deploy and Configure Database
 # Deploy and Configure Web
