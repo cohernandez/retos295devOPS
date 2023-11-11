@@ -16,7 +16,10 @@ Soluciones a los reto `https://reto.295devops.com/` de la IV Edición Bootcamp D
 - `chmod +x *` 
 - `./setup.sh`
 
+**Click en las opciones de la esquina superior derecha, seleccionar `Traffic / Ports`**
 ![Descripción de la imagen](/images/options.png)
+
+**Luego, en `Traffic Port Accesor`, haga click en el puerto `80`**
 ![Descripción de la imagen](/images/trafficPort.png)
 
 
