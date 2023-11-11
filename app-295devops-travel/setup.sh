@@ -45,7 +45,7 @@ echo -e "\n${LBLUE}[+] Ejecutar STAGE 3: [Deploy] ...${NC}"
 host_url=$(curl ifconfig.me)
 read -p "Ingrese el host de la aplicación: " $host_url
 # Quita la barra diagonal al final de la URL (si existe)
-curl "${host_url%/}/app-295devops-travel/
+curl "${host_url%/}/app-295devops-travel/"
 ./discord.sh ~/$repo "${host_url%/}/$app/"
 echo -e "\n${YELLOW} ====================================="
 }
