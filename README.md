@@ -12,7 +12,9 @@ Soluciones a los reto `https://reto.295devops.com/` de la IV Edición Bootcamp D
 - Para el primer ejercicio `chmod +x runMe.sh`
 
 # Reto 1: app-295devops-travel
-- `chmod +x retos295devOPS/app-295devops-travel/* && retos295devOPS/app-295devops-travel/setup.sh`
+- `cd retos295devOPS/app-295devops-travel`
+- `chmod +x app-295devops-travel/*` 
+- `./setup.sh`
 
 # Creditos 
 - https://github.com/roxsross/bootcamp-devops-2023
