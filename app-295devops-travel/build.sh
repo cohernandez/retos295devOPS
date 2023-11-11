@@ -108,7 +108,22 @@ repo="$1"
 app="$2"
 
 # Solicitar al usuario la contraseña de la base de datos en tiempo de despliegue
-read -s -p "Ingrese password de la base de datos: " db_password
+#read -s -p "Ingrese password de la base de datos: " db_password
+#!/bin/bash
+
+while true; do
+    echo "Ingrese la contraseña de la base de datos:"
+    read -s db_password  # La opción -s oculta la entrada mientras se escribe
+
+    # Verifica la fortaleza de la contraseña (puedes personalizar según tus criterios)
+    if [[ ${#db_password} -ge 8 ]]; then
+        echo "¡Contraseña válida!"
+        break  # Sale del bucle si la contraseña es válida
+    else
+        echo "La contraseña debe tener al menos 8 caracteres. Por favor, inténtelo de nuevo."
+    fi
+done
+
 
 # Deploy and Configure Database
 # Deploy and Configure Web
