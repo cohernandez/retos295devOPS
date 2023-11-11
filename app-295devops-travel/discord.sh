@@ -49,4 +49,4 @@ curl -X POST -H "Content-Type: application/json" \
 
 get_name_repo
 check_http_status
-#alert_status_discord
+alert_status_discord

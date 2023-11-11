@@ -89,15 +89,6 @@ configure_php() {
     echo -e "\n${YELLOW} ====================================="
 }
 
-# STAGE 2: [Build]
-# Clonar el repositorio de la aplicación
-# Validar si el repositorio de la aplicación no existe realizar un git clone. y si existe un git pull
-# Mover al directorio donde se guardar los archivos de configuración de apache /var/www/html/
-# Testear existencia del codigo de la aplicación
-# Ajustar el config de php para que soporte los archivos dinamicos de php agreganfo index.php
-# Testear la compatibilidad -> ejemplo http://localhost/info.php
-# Si te muestra resultado de una pantalla informativa php , estariamos funcional para la siguiente etapa.
-
 # Verifica si se proporcionó el argumento del directorio del repositorio y de la aplicación
 if [ $# -ne 2 ]; then
     echo "Uso: $0 <ruta_al_repositorio> <web_app>"
@@ -108,9 +99,6 @@ repo="$1"
 app="$2"
 
 # Solicitar al usuario la contraseña de la base de datos en tiempo de despliegue
-#read -s -p "Ingrese password de la base de datos: " db_password
-#!/bin/bash
-
 while true; do
     echo "Ingrese la contraseña de la base de datos:"
     read -s db_password  # La opción -s oculta la entrada mientras se escribe
